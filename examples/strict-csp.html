@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ontology Viewer — External CSS / CSP</title>
+  <link rel="stylesheet" href="./example.css">
+  <link rel="stylesheet" href="../dist/ontologyviewer.css" data-ontologyviewer-styles>
+</head>
+<body>
+  <h1>External CSS / CSP example</h1>
+  <p>This page uses <code>injectStyles: false</code>. See the README for the required <code>style-src-attr</code> policy.</p>
+  <div class="example-status" data-example-status role="status">
+    Viewer is starting. If this message remains, run <code>npm run examples</code> and use the HTTP URL instead of opening this file directly.
+  </div>
+  <pre class="ontologyviewer">
+@prefix : &lt;https://example.org/food#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+:Food a owl:Class ; rdfs:label "Food" .
+:Fruit a owl:Class ; rdfs:label "Fruit" ; rdfs:subClassOf :Food .
+:Recipe a owl:Class ; rdfs:label "Recipe" .
+:uses a owl:ObjectProperty ; rdfs:label "uses" ; rdfs:domain :Recipe ; rdfs:range :Food .
+  </pre>
+  <script type="module" src="./strict-csp.mjs"></script>
+</body>
+</html>

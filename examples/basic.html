@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>ontologyviewer basic example</title>
+  <link rel="stylesheet" href="./example.css">
+</head>
+<body>
+<div class="example-status" data-example-status role="status">
+  Viewer is starting. If this message remains, run <code>npm run examples</code> in <code>webplugin</code> and use the HTTP URL instead of opening this file directly.
+</div>
+<pre class="ontologyviewer" data-height="600px">
+@prefix : &lt;https://example.org/harbor#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+:Vendor a owl:Class ; rdfs:label "Vendor" .
+:Stall a owl:Class ; rdfs:label "Stall" .
+:operates a owl:ObjectProperty ; rdfs:label "operates" ; rdfs:domain :Vendor ; rdfs:range :Stall .
+</pre>
+<script type="module" src="./auto-init.mjs"></script>
+</body>
+</html>

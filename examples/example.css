@@ -1,0 +1,19 @@
+.example-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 20px; }
+.example-nav a { padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; color: #1d4ed8; background: #fff; text-decoration: none; }
+.example-nav a:hover, .example-nav a:focus-visible { border-color: #2563eb; background: #eff6ff; }
+.example-status {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border: 1px solid #d97706;
+  border-radius: 8px;
+  color: #78350f;
+  background: #fffbeb;
+  font: 14px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.example-status[hidden] { display: none; }
+.example-status.example-error {
+  border-color: #dc2626;
+  color: #7f1d1d;
+  background: #fef2f2;
+}
+.controls button:disabled { cursor: not-allowed; opacity: 0.5; }

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ontology Viewer — Raw Turtle Source</title>
+  <link rel="stylesheet" href="./example.css">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 1200px; margin: 0 auto; padding: 24px; background: #f9fafb; }
+    h1 { color: #1e293b; }
+    p { color: #475569; }
+  </style>
+</head>
+<body>
+  <h1>Raw Turtle without HTML escaping</h1>
+  <nav class="example-nav" aria-label="Example navigation">
+    <a href="./index.html">← Main demo</a>
+  </nav>
+  <p>This example uses an inert <code>&lt;script type="text/turtle"&gt;</code>, so Turtle IRIs can contain ordinary <code>&lt;</code> and <code>&gt;</code> characters.</p>
+  <div class="example-status" data-example-status role="status">
+    Viewer is starting. If this message remains, run <code>npm run examples</code> and use the HTTP URL instead of opening this file directly.
+  </div>
+
+  <script type="text/turtle" class="ontologyviewer" data-height="600px" data-layout="dagre">
+@prefix : <http://example.org/vehicles#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:Vehicle a owl:Class ; rdfs:label "Vehicle" .
+:Car a owl:Class ; rdfs:label "Car" ; rdfs:subClassOf :Vehicle .
+:Bicycle a owl:Class ; rdfs:label "Bicycle" ; rdfs:subClassOf :Vehicle .
+:ElectricCar a owl:Class ; rdfs:label "Electric car" ; rdfs:subClassOf :Car .
+:speed a owl:DatatypeProperty ; rdfs:label "speed" ; rdfs:domain :Vehicle ; rdfs:range xsd:integer .
+  </script>
+
+  <script type="module" src="./auto-init.mjs"></script>
+</body>
+</html>

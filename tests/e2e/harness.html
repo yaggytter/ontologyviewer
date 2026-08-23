@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>E2E harness</title></head>
+<body>
+<pre id="first" class="ontologyviewer" data-height="520px" data-theme="light" data-locale="en" data-storage-key="e2e-first">
+@prefix : &lt;https://example.org/market#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+:Vendor a owl:Class ; rdfs:label "Vendor" .
+:Product a owl:Class ; rdfs:label "Product" .
+:productName a owl:DatatypeProperty ; rdfs:label "product name" ; rdfs:domain :Product ; rdfs:range xsd:string .
+:offers a owl:ObjectProperty ; rdfs:label "offers" ; rdfs:domain :Vendor ; rdfs:range :Product .
+</pre>
+<pre id="second" class="ontologyviewer" data-height="420px" data-theme="dark" data-locale="ja">
+@prefix : &lt;https://example.org/people#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+:Person a owl:Class ; rdfs:label "Person" .
+</pre>
+<script type="module" src="./harness.mjs"></script>
+</body>
+</html>

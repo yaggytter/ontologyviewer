@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ontology Viewer — Harbor Market Example</title>
+  <link rel="stylesheet" href="./example.css">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 1200px; margin: 0 auto; padding: 24px; background: #f9fafb; }
+    h1 { color: #1e293b; }
+    p { color: #475569; }
+  </style>
+</head>
+<body>
+  <h1>🦉 Ontology Viewer Web Plugin — Demo</h1>
+  <nav class="example-nav" data-example-links aria-label="Other examples">
+    <a href="./basic.html">Basic</a>
+    <a href="./multiple-viewers.html">Multiple viewers</a>
+    <a href="./programmatic-api.html">Programmatic API</a>
+    <a href="./strict-csp.html">Strict CSP</a>
+    <a href="./raw-turtle.html">Raw Turtle without HTML escaping</a>
+  </nav>
+  <p>The viewer below is rendered from Turtle embedded in <code>&lt;pre class="ontologyviewer"&gt;</code>.</p>
+  <div class="example-status" data-example-status role="status">
+    Viewer is starting. If this message remains, do not open this file directly: run <code>npm run examples</code> in <code>webplugin</code>, then open the displayed HTTP URL.
+  </div>
+
+  <pre class="ontologyviewer" data-height="650px" data-theme="auto" data-layout="fcose">
+@prefix : &lt;https://example.org/ontology/harbor-market#&gt; .
+@prefix view: &lt;https://example.org/ontology/harbor-market#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+
+&lt;https://example.org/ontology/harbor-market&gt; a owl:Ontology ;
+  rdfs:label "Harbor Market" ;
+  rdfs:comment "A fictional marketplace model." .
+
+:Vendor a owl:Class ; rdfs:label "Vendor" ; view:icon "⛺" ; view:color "#2563EB" .
+:Stall a owl:Class ; rdfs:label "Stall" ; view:icon "🏪" ; view:color "#C2410C" .
+:Product a owl:Class ; rdfs:label "Product" ; view:icon "📦" ; view:color "#15803D" .
+:MarketDay a owl:Class ; rdfs:label "Market Day" ; view:icon "📅" ; view:color "#7E22CE" .
+
+:vendorCode a owl:DatatypeProperty ;
+  rdfs:label "vendor code" ; rdfs:domain :Vendor ; rdfs:range xsd:string ; view:isIdentifier true .
+:stallNumber a owl:DatatypeProperty ;
+  rdfs:label "stall number" ; rdfs:domain :Stall ; rdfs:range xsd:string .
+:productName a owl:DatatypeProperty ;
+  rdfs:label "product name" ; rdfs:domain :Product ; rdfs:range xsd:string .
+:unitPrice a owl:DatatypeProperty ;
+  rdfs:label "unit price" ; rdfs:domain :Product ; rdfs:range xsd:decimal .
+
+:operates a owl:ObjectProperty ;
+  rdfs:label "operates" ; rdfs:domain :Vendor ; rdfs:range :Stall .
+:offers a owl:ObjectProperty ;
+  rdfs:label "offers" ; rdfs:domain :Stall ; rdfs:range :Product .
+:opensOn a owl:ObjectProperty ;
+  rdfs:label "opens on" ; rdfs:domain :Stall ; rdfs:range :MarketDay .
+
+:blueSailFoods a :Vendor ; rdfs:label "Blue Sail Foods" ; :vendorCode "V-104" .
+:pierStall a :Stall ; rdfs:label "Pier Stall" ; :stallNumber "C-12" .
+:seaSaltCrackers a :Product ; rdfs:label "Sea Salt Crackers" ; :unitPrice 480 .
+:autumnSaturday a :MarketDay ; rdfs:label "Autumn Saturday Market" .
+  </pre>
+
+  <script type="module" src="./auto-init.mjs"></script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+/* ontologyviewer.css — all selectors are scoped to the generated root. */
+.ontologyviewer-root {
+  --ov-bg: #fff;
+  --ov-fg: #1f2937;
+  --ov-muted: #64748b;
+  --ov-border: #d7dde5;
+  --ov-toolbar-bg: #f8fafc;
+  --ov-input-bg: #fff;
+  --ov-hover: #eef2f7;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 600px;
+  min-height: 320px;
+  overflow: hidden;
+  border: 1px solid var(--ov-border);
+  border-radius: 10px;
+  color: var(--ov-fg);
+  background: var(--ov-bg);
+  font: 14px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  container-type: inline-size;
+  box-sizing: border-box;
+}
+.ontologyviewer-root *, .ontologyviewer-root *::before, .ontologyviewer-root *::after { box-sizing: border-box; }
+.ontologyviewer-root [hidden] { display: none !important; }
+.ontologyviewer-root.ov-dark {
+  --ov-bg: #1e1e1e;
+  --ov-fg: #d4d4d4;
+  --ov-muted: #a8a8a8;
+  --ov-border: #454545;
+  --ov-toolbar-bg: #252526;
+  --ov-input-bg: #313131;
+  --ov-hover: #2a2d2e;
+}
+.ontologyviewer-root button,
+.ontologyviewer-root input,
+.ontologyviewer-root select { font: inherit; }
+.ontologyviewer-root button:focus-visible,
+.ontologyviewer-root input:focus-visible,
+.ontologyviewer-root select:focus-visible,
+.ontologyviewer-root summary:focus-visible { outline: 2px solid #1685d1; outline-offset: 2px; }
+.ontologyviewer-root .ov-toolbar {
+  z-index: 5;
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--ov-border);
+  background: var(--ov-toolbar-bg);
+}
+.ontologyviewer-root .ov-view-toggle,
+.ontologyviewer-root .ov-controls { display: flex; align-items: center; gap: 4px; }
+.ontologyviewer-root .ov-view-toggle button,
+.ontologyviewer-root .ov-controls button,
+.ontologyviewer-root .ov-layout-select,
+.ontologyviewer-root .ov-inspector-close {
+  min-height: 32px;
+  padding: 4px 9px;
+  border: 1px solid var(--ov-border);
+  border-radius: 6px;
+  color: var(--ov-fg);
+  background: var(--ov-bg);
+  cursor: pointer;
+}
+.ontologyviewer-root button:hover,
+.ontologyviewer-root .ov-layout-select:hover { background: var(--ov-hover); }
+.ontologyviewer-root .ov-view-toggle button.active {
+  border-color: #0878bd;
+  color: #fff;
+  background: #0878bd;
+}
+.ontologyviewer-root .ov-search {
+  flex: 1 1 250px;
+  min-width: 130px;
+  height: 34px;
+  padding: 5px 9px;
+  border: 1px solid var(--ov-border);
+  border-radius: 7px;
+  color: var(--ov-fg);
+  background: var(--ov-input-bg);
+}
+.ontologyviewer-root .ov-layout-select { height: 34px; }
+.ontologyviewer-root .ov-body { display: flex; flex: 1 1 auto; min-height: 0; }
+.ontologyviewer-root .ov-stage { position: relative; flex: 1 1 auto; min-width: 0; min-height: 260px; }
+/* Cytoscape forces its container to position: relative; explicit dimensions prevent a zero-height graph. */
+.ontologyviewer-root .ov-graph { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ontologyviewer-root .ov-message {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+}
+.ontologyviewer-root .ov-error { color: #b42318; background: #fff5f4; }
+.ontologyviewer-root.ov-dark .ov-error { color: #ff8a80; background: #2e1b1a; }
+.ontologyviewer-root .ov-inspector {
+  position: relative;
+  flex: 0 0 300px;
+  width: 300px;
+  overflow: auto;
+  padding: 14px;
+  border-left: 1px solid var(--ov-border);
+  background: var(--ov-bg);
+}
+.ontologyviewer-root .ov-inspector-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: none;
+  min-width: 30px;
+  padding: 2px 7px;
+  font-size: 20px;
+}
+.ontologyviewer-root .ov-inspector h3 { margin: 0 30px 8px 0; font-size: 16px; }
+.ontologyviewer-root .ov-inspector h4 { margin: 14px 0 5px; font-size: 13px; }
+.ontologyviewer-root .ov-inspector p { overflow-wrap: anywhere; }
+.ontologyviewer-root .ov-inspector dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 4px 10px;
+  margin: 10px 0;
+}
+.ontologyviewer-root .ov-inspector dt { font-weight: 600; }
+.ontologyviewer-root .ov-inspector dd { margin: 0; overflow-wrap: anywhere; }
+.ontologyviewer-root .ov-inspector ul { margin: 5px 0; padding-left: 20px; }
+.ontologyviewer-root .ov-inspector-empty { color: var(--ov-muted); text-align: center; }
+.ontologyviewer-root .ov-inspector-desc { color: var(--ov-muted); }
+.ontologyviewer-root .ov-prop-list { list-style: none; padding: 0 !important; }
+.ontologyviewer-root .ov-prop-list li { padding: 3px 0; border-bottom: 1px solid var(--ov-border); }
+.ontologyviewer-root .ov-footer {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 10px;
+  border-top: 1px solid var(--ov-border);
+  color: var(--ov-muted);
+  font-size: 12px;
+}
+.ontologyviewer-root .ov-legend summary { cursor: pointer; }
+.ontologyviewer-root .ov-legend-content { display: flex; gap: 12px; padding-top: 5px; }
+.ontologyviewer-root .ov-legend-item::before {
+  display: inline-block;
+  width: 18px;
+  margin-right: 5px;
+  border-top: 3px solid #64748b;
+  content: "";
+  vertical-align: middle;
+}
+.ontologyviewer-root .ov-subclass::before { border-color: #b180d7; }
+.ontologyviewer-root .ov-broader::before { border-color: #16875c; }
+.ontologyviewer-root .ov-inferred::before { border-top-style: dashed; }
+.ontologyviewer-root .ov-search-dropdown {
+  position: absolute;
+  z-index: 20;
+  top: 51px;
+  left: 120px;
+  width: min(520px, calc(100% - 240px));
+  max-height: 260px;
+  overflow: auto;
+  padding: 5px;
+  border: 1px solid var(--ov-border);
+  border-radius: 8px;
+  background: var(--ov-bg);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 20%);
+}
+.ontologyviewer-root .ov-search-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 8px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--ov-fg);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.ontologyviewer-root .ov-search-meta { color: var(--ov-muted); font-size: 11px; }
+.ontologyviewer-root .ov-search-empty { margin: 0; padding: 10px; color: var(--ov-muted); }
+
+@container (max-width: 759px) {
+  .ontologyviewer-root .ov-toolbar { flex-wrap: wrap; }
+  .ontologyviewer-root .ov-search { order: 3; flex-basis: 100%; }
+  .ontologyviewer-root .ov-body { display: block; position: relative; }
+  .ontologyviewer-root .ov-stage { height: 100%; }
+  .ontologyviewer-root .ov-inspector {
+    position: absolute;
+    z-index: 10;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    max-height: 52%;
+    border-top: 1px solid var(--ov-border);
+    border-left: 0;
+    box-shadow: 0 -8px 24px rgb(0 0 0 / 22%);
+  }
+  .ontologyviewer-root .ov-inspector-close { display: block; }
+  .ontologyviewer-root .ov-search-dropdown { top: 92px; left: 10px; width: calc(100% - 20px); }
+  .ontologyviewer-root .ov-footer { align-items: flex-start; }
+}
+
+/* Cytoscape normally injects this fixed rule as an inline style. Keeping it in
+   the external bundle lets strict-CSP users avoid that injection. */
+.ontologyviewer-root .__________cytoscape_container { position: relative; }

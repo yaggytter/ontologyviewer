@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ontology Viewer — Multiple Viewers</title>
+  <link rel="stylesheet" href="./example.css">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 1200px; margin: 0 auto; padding: 24px; background: #f9fafb; }
+    h1 { color: #1e293b; }
+    h2 { color: #334155; margin-top: 2em; }
+  </style>
+</head>
+<body>
+  <h1>🦉 Multiple Viewers on One Page</h1>
+  <p>Each viewer is independent — different themes, locales, and layouts.</p>
+  <div class="example-status" data-example-status role="status">
+    Viewers are starting. If this message remains, run <code>npm run examples</code> and use the HTTP URL instead of opening this file directly.
+  </div>
+
+  <h2>Light Theme — English — fCoSE Layout</h2>
+  <pre class="ontologyviewer" data-height="400px" data-theme="light" data-locale="en" data-layout="fcose">
+@prefix : &lt;http://example.org/animals#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+:Animal a owl:Class ; rdfs:label "Animal" .
+:Mammal a owl:Class ; rdfs:label "Mammal" ; rdfs:subClassOf :Animal .
+:Bird a owl:Class ; rdfs:label "Bird" ; rdfs:subClassOf :Animal .
+:Dog a owl:Class ; rdfs:label "Dog" ; rdfs:subClassOf :Mammal .
+:Cat a owl:Class ; rdfs:label "Cat" ; rdfs:subClassOf :Mammal .
+:eats a owl:ObjectProperty ; rdfs:label "eats" ; rdfs:domain :Animal ; rdfs:range :Animal .
+  </pre>
+
+  <h2>Dark Theme — Japanese — Dagre Layout</h2>
+  <pre class="ontologyviewer" data-height="400px" data-theme="dark" data-locale="ja" data-layout="dagre">
+@prefix : &lt;http://example.org/vehicles#&gt; .
+@prefix owl: &lt;http://www.w3.org/2002/07/owl#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt; .
+:Vehicle a owl:Class ; rdfs:label "乗り物" .
+:Car a owl:Class ; rdfs:label "自動車" ; rdfs:subClassOf :Vehicle .
+:Bicycle a owl:Class ; rdfs:label "自転車" ; rdfs:subClassOf :Vehicle .
+:ElectricCar a owl:Class ; rdfs:label "電気自動車" ; rdfs:subClassOf :Car .
+:speed a owl:DatatypeProperty ; rdfs:label "速度" ; rdfs:domain :Vehicle ; rdfs:range xsd:integer .
+  </pre>
+
+  <script type="module" src="./auto-init.mjs"></script>
+</body>
+</html>
