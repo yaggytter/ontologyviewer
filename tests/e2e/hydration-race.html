@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Ontology Viewer hydration race fixture</title>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      const hydratedSource = document.createElement("script");
+      hydratedSource.id = "hydrated-source";
+      hydratedSource.type = "text/turtle";
+      hydratedSource.className = "ontologyviewer";
+      hydratedSource.dataset.height = "360px";
+      hydratedSource.textContent = `
+@prefix : <https://example.org/hydrated#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+:HydratedClass a owl:Class ; rdfs:label "Hydrated class" .
+`;
+      document.querySelector("#app").replaceChildren(hydratedSource);
+      document.documentElement.dataset.hydrated = "true";
+    }, { once: true });
+  </script>
+  <script type="module">
+    import ontologyviewer from "../../dist/ontologyviewer.esm.mjs";
+
+    const manager = ontologyviewer.initialize({ startOnLoad: true });
+    const instances = await manager.ready;
+    document.documentElement.dataset.sourceId = instances[0]?.sourceElement.id ?? "none";
+    document.documentElement.dataset.ready = "true";
+  </script>
+</head>
+<body>
+  <main id="app">
+    <script id="server-source" type="text/turtle" class="ontologyviewer" data-height="360px">
+@prefix : <https://example.org/server#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+:ServerClass a owl:Class .
+    </script>
+  </main>
+</body>
+</html>

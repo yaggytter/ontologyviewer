@@ -19,7 +19,7 @@ A standalone, read-only Turtle ontology viewer for web pages. It renders class-f
 </script>
 
 <script type="module">
-  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.0/dist/ontologyviewer.esm.min.mjs";
+  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.1/dist/ontologyviewer.esm.min.mjs";
   ontologyviewer.initialize({ startOnLoad: true });
 </script>
 ```
@@ -28,12 +28,12 @@ The inert `text/turtle` script is retained in the DOM and hidden while its viewe
 
 Do not double-click the files under `examples/`: browser ES Modules are commonly blocked on `file:` URLs. From `webplugin/`, run `npm run examples` and open `http://127.0.0.1:4173/examples/index.html`. The example page now keeps an actionable message visible when it is opened incorrectly or when `dist/` has not been built.
 
-For reproducible pages, pin a complete version (`@0.1.0`). A major selector such as `@10` follows compatible releases but can change the delivered bytes.
+For reproducible pages, pin a complete version (`@0.1.1`). A major selector such as `@10` follows compatible releases but can change the delivered bytes.
 
 ## Install from npm
 
 ```bash
-npm install --save-exact ontologyviewer@0.1.0
+npm install --save-exact ontologyviewer@0.1.1
 ```
 
 ```ts
@@ -99,7 +99,7 @@ instance.destroy();
 ontologyviewer.getInstance(source); // undefined after destroy()
 ```
 
-`initialize()` does not install a `MutationObserver`. For dynamically inserted source elements, call `manager.scan(container)` or `render(element)` explicitly.
+`initialize()` does not install a `MutationObserver`. For dynamically inserted source elements, call `manager.scan(container)` or `render(element)` explicitly. With `startOnLoad: true`, the initial scan waits for `window.load` unless the document is already complete, avoiding races with Gatsby/React hydration that can replace server-rendered DOM.
 
 See [API.md](docs/API.md) for the complete contracts and lifecycle states.
 
@@ -109,14 +109,14 @@ Automatic style injection is convenient but requires an inline `<style>`. Disabl
 
 ```html
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.0/dist/ontologyviewer.css"
+      href="https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.1/dist/ontologyviewer.css"
       data-ontologyviewer-styles>
 <script type="module" src="/assets/start-ontologyviewer.mjs"></script>
 ```
 
 ```js
 // /assets/start-ontologyviewer.mjs
-import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.0/dist/ontologyviewer.esm.min.mjs";
+import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.1/dist/ontologyviewer.esm.min.mjs";
 ontologyviewer.initialize({ startOnLoad: true, injectStyles: false });
 ```
 

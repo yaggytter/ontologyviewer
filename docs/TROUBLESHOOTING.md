@@ -20,6 +20,12 @@ Check, in order: `baseIri`, `data-base-iri`, Turtle `@base`, and the page's `doc
 
 The default module injects CSS. Under CSP, load `dist/ontologyviewer.css`, add `data-ontologyviewer-styles` to the link, and pass `injectStyles: false`. See [CUSTOMIZATION.md](CUSTOMIZATION.md).
 
+## The Viewer appears only after reloading a framework-rendered page
+
+Gatsby, React, and similar frameworks can hydrate server-rendered HTML while module and `async` bundles are loading. Older ontologyviewer builds could scan during `document.readyState === "interactive"`; a later hydration pass could then replace the source subtree and remove the generated Viewer. The outcome depended on network and browser cache timing, so it was intermittent.
+
+Use a build where `startOnLoad: true` waits for `window.load` whenever the document is not yet complete. Keep the source element in the hydrated output and await `manager.ready` before assuming initialization finished. No persistent DOM observer is installed.
+
 ## A dynamic element is not initialized
 
 This is intentional: no DOM observer runs in the background. Call `manager.scan(parent)` or `ontologyviewer.render(element)`.

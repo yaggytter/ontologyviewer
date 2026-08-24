@@ -1,6 +1,6 @@
 {
   "name": "ontologyviewer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Standalone read-only Turtle ontology viewer for web pages, with Schema and Triples diagrams powered by Cytoscape.",
   "type": "module",
   "main": "./dist/ontologyviewer.esm.mjs",
@@ -56,12 +56,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yaggytter/ontologyviewer.git"
+    "url": "git+https://github.com/yaggytter/vscode-ontology-viewer.git",
+    "directory": "webplugin"
   },
   "bugs": {
-    "url": "https://github.com/yaggytter/ontologyviewer/issues"
+    "url": "https://github.com/yaggytter/vscode-ontology-viewer/issues"
   },
-  "homepage": "https://github.com/yaggytter/ontologyviewer/tree/main#readme",
+  "homepage": "https://github.com/yaggytter/vscode-ontology-viewer/tree/main/webplugin#readme",
   "publishConfig": {
     "access": "public"
   },

@@ -74,17 +74,17 @@ export function initialize(options: InitializeOptions = {}): OntologyViewerManag
 
   let ready: Promise<readonly OntologyViewerInstance[]> = Promise.resolve([]);
   if (startOnLoad && typeof document !== "undefined") {
-    ready = document.readyState === "loading"
-      ? new Promise((resolve, reject) => {
-          document.addEventListener("DOMContentLoaded", () => {
+    ready = document.readyState === "complete"
+      ? Promise.resolve(scan(document))
+      : new Promise((resolve, reject) => {
+          window.addEventListener("load", () => {
             try {
               resolve(scan(document));
             } catch (error) {
               reject(error);
             }
           }, { once: true });
-        })
-      : Promise.resolve(scan(document));
+        });
   }
 
   return {

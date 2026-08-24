@@ -18,6 +18,36 @@ test("auto-initializes multiple isolated viewers with themes and locales", async
   await expect(roots.nth(1).locator(".ov-stats")).toContainText("エンティティ: 1");
 });
 
+test("initial scan uses the post-hydration DOM", async ({ page }) => {
+  await page.goto("/tests/e2e/hydration-race.html");
+  await expect(page.locator("html")).toHaveAttribute("data-hydrated", "true");
+  await expect(page.locator("html")).toHaveAttribute("data-ready", "true");
+  await expect(page.locator("html")).toHaveAttribute("data-source-id", "hydrated-source");
+  await expect(page.locator("#server-source")).toHaveCount(0);
+  await expect(page.locator("#hydrated-source")).toBeHidden();
+  await expect(page.locator(".ontologyviewer-root")).toHaveCount(1);
+  await expect(page.locator(".ov-stats")).toContainText("Entities: 1");
+});
+
+test("uses default mouse-wheel zoom without Cytoscape warnings", async ({ page }) => {
+  const warnings: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "warning") warnings.push(message.text());
+  });
+  await page.goto("/tests/e2e/harness.html");
+  await expect(page.locator("html")).toHaveAttribute("data-ready", "true");
+
+  const root = page.locator(".ontologyviewer-root").first();
+  const graph = root.locator(".ov-graph");
+  const zoomLabel = root.locator(".ov-btn-reset-zoom");
+  await graph.hover();
+  const initialZoom = await zoomLabel.textContent();
+  await page.mouse.wheel(0, -400);
+  await expect.poll(() => zoomLabel.textContent()).not.toBe(initialZoom);
+
+  expect(warnings.filter((message) => message.includes("custom wheel sensitivity"))).toEqual([]);
+});
+
 test("searches, inspects, switches views, and changes layout", async ({ page }) => {
   const root = page.locator(".ontologyviewer-root").first();
   await root.locator(".ov-search").fill("Product");

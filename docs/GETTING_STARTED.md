@@ -13,7 +13,7 @@
 :Thing a owl:Class .
 </script>
 <script type="module">
-  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.0/dist/ontologyviewer.esm.min.mjs";
+  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.1/dist/ontologyviewer.esm.min.mjs";
   ontologyviewer.initialize({ startOnLoad: true });
 </script>
 ```
@@ -27,10 +27,12 @@ npm run examples
 
 The examples display an actionable startup message when opened through `file:` or when `dist/` cannot be loaded.
 
+`startOnLoad: true` scans immediately if the document is already complete. During the initial page load it waits for `window.load`, so Gatsby/React and similar frameworks can hydrate their server-rendered DOM before ontologyviewer replaces the source with its Viewer. This is a one-shot delay and does not install a `MutationObserver`.
+
 ## npm
 
 ```bash
-npm install --save-exact ontologyviewer@0.1.0
+npm install --save-exact ontologyviewer@0.1.1
 ```
 
 ```ts

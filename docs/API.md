@@ -12,7 +12,7 @@ The default export contains the same three functions.
 
 Options extend `OntologyViewerOptions` and add:
 
-- `startOnLoad?: boolean` — scan now, or after `DOMContentLoaded` when the document is still loading.
+- `startOnLoad?: boolean` — scan immediately when the document is already complete; otherwise scan once at `window.load`, after parser-inserted async/deferred scripts and framework hydration have had a chance to finish.
 - `selector?: string` — default `pre.ontologyviewer, script[type="text/turtle"].ontologyviewer`.
 
 The manager exposes:
