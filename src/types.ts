@@ -40,7 +40,7 @@ export interface OntologyViewerOptions {
 }
 
 export interface InitializeOptions extends OntologyViewerOptions {
-  /** Scan matching source elements. */
+  /** Scan matching source elements once the page load is stable. */
   startOnLoad?: boolean;
   /** Selector used by the scanner. Default: pre.ontologyviewer plus inert text/turtle script sources. */
   selector?: string;

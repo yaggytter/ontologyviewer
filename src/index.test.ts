@@ -99,17 +99,51 @@ describe("public API", () => {
     expect(manager.instances()).toHaveLength(0);
   });
 
-  it("waits for DOMContentLoaded when initialized during loading", async () => {
+  it("waits for window load when initialized during loading", async () => {
     Object.defineProperty(document, "readyState", { value: "loading", configurable: true });
-    const { initialize } = await import("./index");
-    const source = document.createElement("pre");
-    source.className = "ontologyviewer";
-    document.body.appendChild(source);
-    const manager = initialize({ startOnLoad: true });
-    expect(factory).not.toHaveBeenCalled();
-    document.dispatchEvent(new Event("DOMContentLoaded"));
-    expect(await manager.ready).toHaveLength(1);
-    Object.defineProperty(document, "readyState", { value: "complete", configurable: true });
+    try {
+      const { initialize } = await import("./index");
+      const source = document.createElement("pre");
+      source.className = "ontologyviewer";
+      document.body.appendChild(source);
+      const manager = initialize({ startOnLoad: true });
+      expect(factory).not.toHaveBeenCalled();
+      document.dispatchEvent(new Event("DOMContentLoaded"));
+      expect(factory).not.toHaveBeenCalled();
+      window.dispatchEvent(new Event("load"));
+      expect(await manager.ready).toHaveLength(1);
+    } finally {
+      Object.defineProperty(document, "readyState", { value: "complete", configurable: true });
+    }
+  });
+
+  it("scans the post-hydration DOM when initialized during interactive", async () => {
+    Object.defineProperty(document, "readyState", { value: "interactive", configurable: true });
+    try {
+      const { initialize } = await import("./index");
+      const serverSource = document.createElement("pre");
+      serverSource.id = "server-source";
+      serverSource.className = "ontologyviewer";
+      serverSource.textContent = "@prefix : <https://example.org/server#> .";
+      document.body.appendChild(serverSource);
+
+      const manager = initialize({ startOnLoad: true });
+      expect(factory).not.toHaveBeenCalled();
+
+      const hydratedSource = document.createElement("pre");
+      hydratedSource.id = "hydrated-source";
+      hydratedSource.className = "ontologyviewer";
+      hydratedSource.textContent = "@prefix : <https://example.org/hydrated#> .";
+      serverSource.replaceWith(hydratedSource);
+      window.dispatchEvent(new Event("load"));
+
+      const instances = await manager.ready;
+      expect(instances).toHaveLength(1);
+      expect(instances[0]?.sourceElement).toBe(hydratedSource);
+      expect(factory.mock.calls[0]?.[1]).toContain("https://example.org/hydrated#");
+    } finally {
+      Object.defineProperty(document, "readyState", { value: "complete", configurable: true });
+    }
   });
 
   it("destroyAll immediately after initialize does not throw", async () => {

@@ -181,7 +181,6 @@ export function createViewer(
       layout: { name: "preset" },
       minZoom: 0.35,
       maxZoom: 2.5,
-      wheelSensitivity: 0.25,
     });
 
     const restored = restoreLayout(cy, view);
