@@ -13,7 +13,7 @@
 :Thing a owl:Class .
 </script>
 <script type="module">
-  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.1/dist/ontologyviewer.esm.min.mjs";
+  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs";
   ontologyviewer.initialize({ startOnLoad: true });
 </script>
 ```
@@ -32,7 +32,7 @@ The examples display an actionable startup message when opened through `file:` o
 ## npm
 
 ```bash
-npm install --save-exact ontologyviewer@0.1.1
+npm install --save-exact ontologyviewer@0.1.2
 ```
 
 ```ts

@@ -44,8 +44,8 @@ Create the protected `npm-publish` GitHub Environment, require reviewers, and pr
 3. Commit and merge the release change.
 4. Create and push an exact version tag:
    ```bash
-   git tag v0.1.1
-   git push origin v0.1.1
+   git tag v0.1.2
+   git push origin v0.1.2
    ```
 5. The workflow verifies `v${package.version}`, reruns every gate, requests an OIDC token only in the protected publish job, and runs `npm publish --access public`. Trusted Publishing adds provenance automatically.
 
@@ -54,15 +54,15 @@ The workflow intentionally contains no `NODE_AUTH_TOKEN` or npm secret.
 ## Verify npm and jsDelivr
 
 ```bash
-npm view ontologyviewer@0.1.1 version dist.integrity repository
-npm pack ontologyviewer@0.1.1 --dry-run
+npm view ontologyviewer@0.1.2 version dist.integrity repository
+npm pack ontologyviewer@0.1.2 --dry-run
 ```
 
 Then test:
 
 ```text
-https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.1/dist/ontologyviewer.esm.min.mjs
-https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.1/dist/ontologyviewer.css
+https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs
+https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.css
 ```
 
 Use an exact version in release validation. CDN propagation can take a short time.
