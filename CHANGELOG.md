@@ -2,6 +2,12 @@
 
 All notable changes to `ontologyviewer` are recorded here. The format follows Keep a Changelog and Semantic Versioning.
 
+## [0.1.2] — 2026-08-24
+
+### Fixed
+
+- point repository, issues, homepage, and release links at the standalone yaggytter/ontologyviewer repository
+
 ## [0.1.1] — 2026-08-24
 
 ### Added
@@ -11,13 +17,13 @@ All notable changes to `ontologyviewer` are recorded here. The format follows Ke
 
 ### Fixed
 
+- Correct package repository, issue, and homepage metadata to point to the standalone `ontologyviewer` repository.
 - Defer `startOnLoad` scanning until the page load is stable so Gatsby/React hydration cannot remove an early Viewer on intermittent first visits.
-
 - Use Cytoscape's default wheel sensitivity to avoid console warnings while preserving browser-appropriate mouse-wheel zoom.
 - Keep multiline Schema labels inside their cards.
 - Represent every parsed quad in Triples view and distinguish quoted literal nodes from resources.
 
-[0.1.1]: https://github.com/yaggytter/vscode-ontology-viewer/releases/tag/v0.1.1
+[0.1.1]: https://github.com/yaggytter/ontologyviewer/releases/tag/v0.1.2
 
 ## [0.1.0] — 2026-08-19
 
@@ -43,4 +49,4 @@ All notable changes to `ontologyviewer` are recorded here. The format follows Ke
 - No network/telemetry APIs or editor write operations are present.
 - Exact dependency versions and a committed lockfile; clean audit at release preparation.
 
-[0.1.0]: https://github.com/yaggytter/vscode-ontology-viewer/releases/tag/v0.1.0
+[0.1.0]: https://github.com/yaggytter/ontologyviewer/releases/tag/v0.1.0
