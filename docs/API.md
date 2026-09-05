@@ -38,6 +38,7 @@ The default scanner accepts both `<pre class="ontologyviewer">` and inert `<scri
 | `locale` | `auto`, `en`, `ja` | `auto` |
 | `layout` | `fcose`, `dagre` | `fcose` |
 | `defaultView` | `schema`, `triples` | `schema` |
+| `compactTriples` | boolean | `true` |
 | `baseIri` | absolute or relative IRI | `document.baseURI` |
 | `storageKey` | non-empty string, max 200 characters | persistence off |
 | `injectStyles` | boolean | `true` |

@@ -3,6 +3,9 @@ export type Locale = "auto" | "en" | "ja";
 export interface Messages {
   schemaView: string;
   triplesView: string;
+  compactTriples: string;
+  compactTriplesHint: string;
+  compactTriplesActiveHint: string;
   searchPlaceholder: string;
   noResults: string;
   properties: string;
@@ -34,6 +37,9 @@ export interface Messages {
 const EN: Messages = {
   schemaView: "Schema",
   triplesView: "Triples",
+  compactTriples: "Compact",
+  compactTriplesHint: "Fold labels, comments, and standard vocabulary terms into the nodes that reference them.",
+  compactTriplesActiveHint: "Compact view is on. Click to show labels, comments, and vocabulary terms as separate nodes.",
   searchPlaceholder: "Search classes, relations, properties…",
   noResults: "No results",
   properties: "properties",
@@ -65,6 +71,9 @@ const EN: Messages = {
 const JA: Messages = {
   schemaView: "スキーマ",
   triplesView: "トリプル",
+  compactTriples: "簡約",
+  compactTriplesHint: "ラベル・コメント・標準語彙の用語を、それを参照しているノードに畳み込みます。",
+  compactTriplesActiveHint: "簡約表示が有効です。クリックすると、ラベル・コメント・語彙の用語を個別のノードとして表示します。",
   searchPlaceholder: "クラス・関係・プロパティを検索…",
   noResults: "結果なし",
   properties: "プロパティ",

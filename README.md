@@ -51,6 +51,7 @@ await manager.ready;
 
 - Schema cards with datatype properties, icons, color hints, cardinality, inferred-relation styling, statistics, legend, and read-only Inspector.
 - Raw Triples view, search, neighborhood focus, pan, zoom, fit, fCoSE/Dagre layouts, node dragging, and PNG export.
+- Compact Triples view (on by default): labels, comments, and standard vocabulary terms are folded into the nodes that reference them, which removed two thirds of the boxes and 70% of the edges on a 1182-triple schema ontology. A toolbar toggle expands them again; set `compactTriples: false` or `data-compact-triples="false"` to start expanded.
 - Multiple isolated viewers in one document.
 - English and Japanese UI; automatic light/dark theme tracking.
 - Optional, validated `localStorage` layout persistence.
@@ -69,6 +70,7 @@ await manager.ready;
   data-locale="ja"
   data-layout="dagre"
   data-default-view="schema"
+  data-compact-triples="true"
   data-base-iri="https://example.org/base/"
   data-storage-key="harbor-market"
 >...</script>
@@ -83,6 +85,7 @@ const source = document.querySelector<HTMLElement>("#ontology")!;
 const instance = ontologyviewer.render(source, {
   baseIri: "https://example.org/base/",
   defaultView: "schema",
+  compactTriples: true,
   layout: "fcose",
   storageKey: "example-layout", // omit to disable persistence
   onError(error) {

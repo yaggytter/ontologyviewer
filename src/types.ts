@@ -23,6 +23,11 @@ export interface OntologyViewerOptions {
   layout?: LayoutName;
   /** Initial graph view. */
   defaultView?: ViewMode;
+  /**
+   * In the triples view, fold leaf annotation nodes (literals and standard
+   * vocabulary terms) into the nodes that point at them. Default: true.
+   */
+  compactTriples?: boolean;
   /** Base IRI used when the Turtle source has no @base directive. */
   baseIri?: string;
   /** @deprecated Use baseIri. */

@@ -51,6 +51,7 @@ await manager.ready;
 
 - datatype property、アイコン、色指定、cardinality、推論関係、統計、凡例、読み取り専用Inspectorを備えたSchemaカード。
 - Triples表示、検索、近傍focus、pan、zoom、fit、fCoSE/Dagre、node移動、PNG出力。
+- Triples表示の簡約（既定で有効）。ラベル・コメント・標準語彙の用語を、それを参照しているノードに畳み込みます。1182トリプルのスキーマオントロジーで箱が3分の1、エッジが70%減りました。ツールバーのトグルで展開でき、`compactTriples: false` または `data-compact-triples="false"` で最初から展開状態にできます。
 - 1ページ内の複数Viewerを完全に分離。
 - 英語・日本語UIとlight/darkテーマの自動追従。
 - `storageKey` を指定した場合だけ、有効値を検査してレイアウトを `localStorage` に保存。
@@ -69,6 +70,7 @@ await manager.ready;
   data-locale="ja"
   data-layout="dagre"
   data-default-view="schema"
+  data-compact-triples="true"
   data-base-iri="https://example.org/base/"
   data-storage-key="harbor-market"
 >...</script>
@@ -83,6 +85,7 @@ const source = document.querySelector<HTMLElement>("#ontology")!;
 const instance = ontologyviewer.render(source, {
   baseIri: "https://example.org/base/",
   defaultView: "schema",
+  compactTriples: true,
   layout: "fcose",
   storageKey: "example-layout", // 省略すると保存しない
   onError(error) {

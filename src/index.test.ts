@@ -215,3 +215,44 @@ describe("public API", () => {
     expect((factory.mock.calls[0][2] as OntologyViewerOptions).height).toBe("420px");
   });
 });
+
+describe("compactTriples option resolution", () => {
+  beforeEach(() => {
+    vi.resetModules();
+    document.head.replaceChildren();
+    document.body.replaceChildren();
+    factory.mockReset();
+    factory.mockImplementation((element: HTMLElement, _source: string, options: OntologyViewerOptions, cleanup: () => void) => mockViewer(element, options, cleanup));
+  });
+
+  async function renderWith(attributes: Record<string, string>, options?: OntologyViewerOptions) {
+    const { render } = await import("./index");
+    const source = document.createElement("pre");
+    source.className = "ontologyviewer";
+    source.textContent = "@prefix : <https://example.org/> .";
+    for (const [name, value] of Object.entries(attributes)) source.setAttribute(name, value);
+    document.body.appendChild(source);
+    render(source, options);
+    return factory.mock.calls.at(-1)?.[2] as OntologyViewerOptions;
+  }
+
+  it("defaults to compaction enabled", async () => {
+    expect((await renderWith({})).compactTriples).toBe(true);
+  });
+
+  it("honours data-compact-triples=\"false\" as an opt-out", async () => {
+    expect((await renderWith({ "data-compact-triples": "false" })).compactTriples).toBe(false);
+  });
+
+  it("treats a bare data-compact-triples attribute as enabled", async () => {
+    expect((await renderWith({ "data-compact-triples": "" })).compactTriples).toBe(true);
+  });
+
+  it("ignores an unrecognized data-compact-triples value", async () => {
+    expect((await renderWith({ "data-compact-triples": "maybe" })).compactTriples).toBe(true);
+  });
+
+  it("lets the programmatic option win over the attribute", async () => {
+    expect((await renderWith({ "data-compact-triples": "false" }, { compactTriples: true })).compactTriples).toBe(true);
+  });
+});

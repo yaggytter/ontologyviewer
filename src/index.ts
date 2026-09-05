@@ -110,6 +110,15 @@ function matchingElements(root: ParentNode, selector: string): HTMLElement[] {
   return matches;
 }
 
+/** Reads an opt-out boolean from a data attribute. Only "false"/"0"/"off" disable. */
+function parseBoolean(value: string | undefined): boolean | undefined {
+  if (value === undefined) return undefined;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === "false" || normalized === "0" || normalized === "off") return false;
+  if (normalized === "" || normalized === "true" || normalized === "1" || normalized === "on") return true;
+  return undefined;
+}
+
 function resolveOptions(element: HTMLElement, options: OntologyViewerOptions): OntologyViewerOptions {
   const data = element.dataset;
   const optionBaseIri = options.baseIri ?? options.baseIRI;
@@ -119,6 +128,7 @@ function resolveOptions(element: HTMLElement, options: OntologyViewerOptions): O
     locale: validLocale(options.locale) ?? validLocale(data.locale) ?? "auto",
     layout: validLayout(options.layout) ?? validLayout(data.layout) ?? "fcose",
     defaultView: validView(options.defaultView) ?? validView(data.defaultView) ?? "schema",
+    compactTriples: options.compactTriples ?? parseBoolean(data.compactTriples) ?? true,
     baseIri: safeBaseIri(optionBaseIri ?? data.baseIri, element.ownerDocument.baseURI),
     storageKey: safeStorageKey(options.storageKey ?? data.storageKey),
     injectStyles: options.injectStyles,
