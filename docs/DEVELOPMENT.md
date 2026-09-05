@@ -56,3 +56,34 @@ npm run examples
 ```
 
 The command builds `dist/`, starts the local server, and prints its URL. Open `http://127.0.0.1:4173/examples/index.html`. Do not open example HTML through `file:`; browser module CORS rules prevent the ESM bundle from loading. The pages keep startup guidance visible if the protocol is wrong or the bundle is missing.
+
+### Trying your own ontology
+
+`local/` is git-ignored, so put throwaway evaluation pages there rather than
+editing `examples/`. Any page under it can import the freshly built bundle with
+a relative path and load a file from disk through `update()`:
+
+```html
+<!-- local/try.html -->
+<input type="file" id="file" accept=".ttl">
+<pre id="src" class="ontologyviewer" data-height="700px"></pre>
+<script type="module">
+  import ontologyviewer from "../dist/ontologyviewer.esm.mjs";
+  const src = document.getElementById("src");
+  const instance = ontologyviewer.render(src, { defaultView: "triples" });
+  document.getElementById("file").addEventListener("change", async (event) => {
+    await instance.update(await event.target.files[0].text());
+  });
+</script>
+```
+
+Then `npm run examples` and open `http://127.0.0.1:4173/local/try.html`. Rebuild
+with `npm run build` after changing `src/`; the server itself needs no restart.
+
+To read the rendered graph rather than eyeball it — useful when checking how a
+change affects node and edge counts — the Cytoscape instance is reachable from
+the graph element, which is how the E2E suite asserts on it:
+
+```js
+document.querySelector(".ov-graph")._cyreg.cy.nodes().length;
+```
