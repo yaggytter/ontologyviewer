@@ -2,7 +2,7 @@
 
 All notable changes to `ontologyviewer` are recorded here. The format follows Keep a Changelog and Semantic Versioning.
 
-## [Unreleased]
+## [0.2.0] — 2026-09-06
 
 ### Added
 
@@ -13,11 +13,15 @@ All notable changes to `ontologyviewer` are recorded here. The format follows Ke
 
 - Triples-view nodes now size to their content and wrap their label instead of using a fixed 154x54 box with `ellipsis` truncation, which is required for the folded statements to be visible.
 
+[0.2.0]: https://github.com/yaggytter/ontologyviewer/releases/tag/v0.2.0
+
 ## [0.1.2] — 2026-08-24
 
 ### Fixed
 
 - point repository, issues, homepage, and release links at the standalone yaggytter/ontologyviewer repository
+
+[0.1.2]: https://github.com/yaggytter/ontologyviewer/releases/tag/v0.1.2
 
 ## [0.1.1] — 2026-08-24
 
@@ -34,7 +38,7 @@ All notable changes to `ontologyviewer` are recorded here. The format follows Ke
 - Keep multiline Schema labels inside their cards.
 - Represent every parsed quad in Triples view and distinguish quoted literal nodes from resources.
 
-[0.1.1]: https://github.com/yaggytter/ontologyviewer/releases/tag/v0.1.2
+[0.1.1]: https://github.com/yaggytter/ontologyviewer/releases/tag/v0.1.1
 
 ## [0.1.0] — 2026-08-19
 

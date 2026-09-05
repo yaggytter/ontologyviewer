@@ -19,7 +19,7 @@ Webページ内のTurtleを、読み取り専用の **Schema** 図と **Triples*
 </script>
 
 <script type="module">
-  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs";
+  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.esm.min.mjs";
   ontologyviewer.initialize({ startOnLoad: true });
 </script>
 ```
@@ -28,12 +28,12 @@ Webページ内のTurtleを、読み取り専用の **Schema** 図と **Triples*
 
 `examples/` のHTMLをFinderなどから直接開かないでください。ブラウザのES Moduleは `file:` URLでCORSブロックされます。`webplugin/` で `npm run examples` を実行し、`http://127.0.0.1:4173/examples/index.html` を開いてください。直開きや `dist/` 未生成時には、example画面に起動手順が表示されます。
 
-再現性を重視するページでは完全なバージョン（`@0.1.2`）を固定してください。`@10` のようなmajor指定は互換更新に追従できますが、配信内容は将来変化します。
+再現性を重視するページでは完全なバージョン（`@0.2.0`）を固定してください。`@10` のようなmajor指定は互換更新に追従できますが、配信内容は将来変化します。
 
 ## npmから利用
 
 ```bash
-npm install --save-exact ontologyviewer@0.1.2
+npm install --save-exact ontologyviewer@0.2.0
 ```
 
 ```ts
@@ -110,13 +110,13 @@ inline `<style>` が許可されない場合は自動注入を止め、CSSを明
 
 ```html
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.css"
+      href="https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.css"
       data-ontologyviewer-styles>
 <script type="module" src="/assets/start-ontologyviewer.mjs"></script>
 ```
 
 ```js
-import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs";
+import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.esm.min.mjs";
 ontologyviewer.initialize({ startOnLoad: true, injectStyles: false });
 ```
 

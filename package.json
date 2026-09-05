@@ -1,6 +1,6 @@
 {
   "name": "ontologyviewer",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Standalone read-only Turtle ontology viewer for web pages, with Schema and Triples diagrams powered by Cytoscape.",
   "type": "module",
   "main": "./dist/ontologyviewer.esm.mjs",
