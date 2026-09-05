@@ -26,7 +26,8 @@ interface ViewerDom {
   toolbar: HTMLElement;
   schemaButton: HTMLButtonElement;
   triplesButton: HTMLButtonElement;
-  compactButton: HTMLButtonElement;
+  compactToggle: HTMLLabelElement;
+  compactCheckbox: HTMLInputElement;
   search: HTMLInputElement;
   searchResults: HTMLElement;
   layout: HTMLSelectElement;
@@ -334,10 +335,9 @@ export function createViewer(
     dom.triplesButton.setAttribute("aria-pressed", String(currentView === "triples"));
     // The schema view already folds datatype properties into class cards, so
     // the control would do nothing there.
-    dom.compactButton.hidden = effectiveView() !== "triples";
-    dom.compactButton.classList.toggle("active", compactTriplesEnabled);
-    dom.compactButton.setAttribute("aria-pressed", String(compactTriplesEnabled));
-    dom.compactButton.title = compactTriplesEnabled
+    dom.compactToggle.hidden = effectiveView() !== "triples";
+    dom.compactCheckbox.checked = compactTriplesEnabled;
+    dom.compactToggle.title = compactTriplesEnabled
       ? messages.compactTriplesActiveHint
       : messages.compactTriplesHint;
   }
@@ -472,8 +472,8 @@ export function createViewer(
     clearInspector();
     renderGraph();
   }, { signal });
-  dom.compactButton.addEventListener("click", () => {
-    compactTriplesEnabled = !compactTriplesEnabled;
+  dom.compactCheckbox.addEventListener("change", () => {
+    compactTriplesEnabled = dom.compactCheckbox.checked;
     updateViewButtons();
     clearInspector();
     renderGraph();
@@ -535,10 +535,18 @@ function createDom(doc: Document, root: HTMLElement, messages: Messages, options
   const triplesButton = button(doc, messages.triplesView, "ov-btn-triples");
   viewToggle.append(schemaButton, triplesButton);
 
-  // Only meaningful in the triples view, so it is hidden elsewhere rather than
-  // shown as a dead control. Kept out of the schema/triples radio group.
-  const compactButton = button(doc, messages.compactTriples, "ov-btn-compact");
-  compactButton.title = messages.compactTriplesHint;
+  // A checkbox rather than a pressed button: schema/triples is a mutually
+  // exclusive selection, while compaction is an independent on/off. The
+  // distinct control type communicates that, and a checkbox states its value
+  // without relying on colour. Only meaningful in the triples view, so the
+  // whole chip is hidden elsewhere rather than shown as a dead control.
+  const compactToggle = element(doc, "label", "ov-compact-toggle");
+  const compactCheckbox = doc.createElement("input");
+  compactCheckbox.type = "checkbox";
+  compactCheckbox.className = "ov-compact-checkbox";
+  const compactText = element(doc, "span", "ov-compact-text");
+  compactText.textContent = messages.compactTriples;
+  compactToggle.append(compactCheckbox, compactText);
 
   const search = doc.createElement("input");
   search.type = "search";
@@ -567,7 +575,7 @@ function createDom(doc: Document, root: HTMLElement, messages: Messages, options
     button(doc, messages.layout, "ov-btn-layout", "↻"),
     button(doc, messages.exportPng, "ov-btn-export", "⇩"),
   );
-  toolbar.append(viewToggle, compactButton, search, layout, controls);
+  toolbar.append(viewToggle, compactToggle, search, layout, controls);
 
   const searchResults = element(doc, "div", "ov-search-dropdown");
   searchResults.setAttribute("role", "listbox");
@@ -603,7 +611,7 @@ function createDom(doc: Document, root: HTMLElement, messages: Messages, options
   footer.append(stats, legend);
   root.append(toolbar, searchResults, body, footer);
   const zoomLabelElement = controls.querySelector<HTMLElement>(".ov-btn-reset-zoom") ?? controls;
-  return { toolbar, schemaButton, triplesButton, compactButton, search, searchResults, layout, zoomLabel: zoomLabelElement, stage, graph, message, inspector, stats, legend };
+  return { toolbar, schemaButton, triplesButton, compactToggle, compactCheckbox, search, searchResults, layout, zoomLabel: zoomLabelElement, stage, graph, message, inspector, stats, legend };
 }
 
 function schemaElements(schema: SchemaModel): cytoscape.ElementDefinition[] {

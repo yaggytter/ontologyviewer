@@ -195,8 +195,8 @@ test("triples view represents metadata triples and distinguishes literals", asyn
   // This asserts the fully expanded triples view. Compaction is on by default
   // and folds labels, comments, and vocabulary terms into their subject, so it
   // has to be turned off for the metadata triples to exist as elements.
-  await page.locator(".ov-btn-compact").click();
-  await expect(page.locator(".ov-btn-compact")).toHaveAttribute("aria-pressed", "false");
+  await page.locator(".ov-compact-checkbox").uncheck();
+  await expect(page.locator(".ov-compact-checkbox")).not.toBeChecked();
 
   const graph = await page.locator(".ov-graph").evaluate((element) => {
     const cy = Reflect.get(element, "_cyreg").cy;
@@ -253,16 +253,19 @@ test("file-direct example keeps visible HTTP-server guidance", async ({ page }) 
 
 test("compact toggle applies only to the triples view and survives round-tripping", async ({ page }) => {
   const root = page.locator(".ontologyviewer-root").first();
-  const compact = root.locator(".ov-btn-compact");
+  const chip = root.locator(".ov-compact-toggle");
+  const compact = root.locator(".ov-compact-checkbox");
 
   // The schema view already folds datatype properties into class cards, so the
   // control has nothing to do there.
-  await expect(compact).toBeHidden();
+  await expect(chip).toBeHidden();
 
   await root.locator(".ov-btn-triples").click();
   await expect(root.locator(".ov-btn-triples")).toHaveAttribute("aria-pressed", "true");
-  await expect(compact).toBeVisible();
-  await expect(compact).toHaveAttribute("aria-pressed", "true");
+  await expect(chip).toBeVisible();
+  // The state has to be readable from the control itself, not inferred.
+  await expect(compact).toBeChecked();
+  await expect(chip).toContainText("Compact");
 
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
@@ -282,23 +285,23 @@ test("compact toggle applies only to the triples view and survives round-trippin
   expect(folded.literals).toBe(0);
   expect(folded.tripleLabels).toContainEqual(expect.stringContaining("range: string"));
 
-  await compact.click();
-  await expect(compact).toHaveAttribute("aria-pressed", "false");
+  await compact.uncheck();
+  await expect(compact).not.toBeChecked();
   const expanded = await readGraph();
   expect(expanded.literals).toBeGreaterThan(0);
   expect(expanded.nodeCount).toBeGreaterThan(folded.nodeCount);
   expect(expanded.edgeCount).toBeGreaterThan(folded.edgeCount);
 
   // Folding again must rebuild a working graph, not leave a stale one.
-  await compact.click();
-  await expect(compact).toHaveAttribute("aria-pressed", "true");
+  await compact.check();
+  await expect(compact).toBeChecked();
   const refolded = await readGraph();
   expect(refolded.nodeCount).toBe(folded.nodeCount);
   expect(refolded.edgeCount).toBe(folded.edgeCount);
   await expect(root.locator("canvas")).toHaveCount(3);
 
   await root.locator(".ov-btn-schema").click();
-  await expect(compact).toBeHidden();
+  await expect(chip).toBeHidden();
 
   expect(errors).toEqual([]);
 });
@@ -306,7 +309,7 @@ test("compact toggle applies only to the triples view and survives round-trippin
 test("compact toggle is accessible", async ({ page }) => {
   const root = page.locator(".ontologyviewer-root").first();
   await root.locator(".ov-btn-triples").click();
-  await expect(root.locator(".ov-btn-compact")).toBeVisible();
+  await expect(root.locator(".ov-compact-toggle")).toBeVisible();
   const results = await new AxeBuilder({ page }).include(".ontologyviewer-root").analyze();
   expect(results.violations).toEqual([]);
 });

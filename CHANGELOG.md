@@ -7,7 +7,7 @@ All notable changes to `ontologyviewer` are recorded here. The format follows Ke
 ### Added
 
 - Compact Triples view, enabled by default. Leaf annotation nodes — literals and standard vocabulary terms that nothing points out of — are folded into the nodes that reference them, so a datatype property reads `createdAt / range: dateTime` instead of drawing boxes for its label and its shared `xsd:string` range. On a 1182-triple schema ontology this took the raw triples view from 741 nodes and 1182 edges to 246 nodes and 349 edges (-67% / -70%). `rdfs:label` and `rdfs:comment` are folded without a fact line because `buildGraphModel` already copies those values onto the node, so drawing them again was pure duplication.
-- `compactTriples` option and `data-compact-triples` attribute to control the initial state, plus a **Compact** toolbar toggle (triples view only) to expand and re-fold at runtime.
+- `compactTriples` option and `data-compact-triples` attribute to control the initial state, plus a **Compact** checkbox in the toolbar (triples view only) to expand and re-fold at runtime. A checkbox rather than a pressed button because compaction is an independent on/off, unlike the mutually exclusive Schema/Triples selection — and because it states its value without depending on colour.
 
 ### Changed
 
