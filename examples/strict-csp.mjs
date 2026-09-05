@@ -4,7 +4,7 @@ if (location.protocol === "file:") {
   if (status) {
     status.classList.add("example-error");
     status.setAttribute("role", "alert");
-    status.textContent = "This example must be served over HTTP. Run \"npm run examples\" in webplugin and open the displayed URL.";
+    status.textContent = "This example must be served over HTTP. Run \"npm run examples\" and open the displayed URL.";
   }
 } else {
   try {

@@ -19,21 +19,21 @@ A standalone, read-only Turtle ontology viewer for web pages. It renders class-f
 </script>
 
 <script type="module">
-  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs";
+  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.esm.min.mjs";
   ontologyviewer.initialize({ startOnLoad: true });
 </script>
 ```
 
 The inert `text/turtle` script is retained in the DOM and hidden while its viewer is active. It accepts ordinary Turtle `<...>` IRIs without HTML entity escaping. Avoid a literal `</script>` sequence in that Turtle because HTML treats it as the closing tag. A `<pre class="ontologyviewer">` remains supported, but literal HTML source must write `<` as `&lt;`; `destroy()` restores either source element.
 
-Do not double-click the files under `examples/`: browser ES Modules are commonly blocked on `file:` URLs. From `webplugin/`, run `npm run examples` and open `http://127.0.0.1:4173/examples/index.html`. The example page now keeps an actionable message visible when it is opened incorrectly or when `dist/` has not been built.
+Do not double-click the files under `examples/`: browser ES Modules are commonly blocked on `file:` URLs. Run `npm run examples` and open `http://127.0.0.1:4173/examples/index.html`. The example page now keeps an actionable message visible when it is opened incorrectly or when `dist/` has not been built.
 
-For reproducible pages, pin a complete version (`@0.1.2`). A major selector such as `@10` follows compatible releases but can change the delivered bytes.
+For reproducible pages, pin a complete version (`@0.2.0`). A major selector such as `@10` follows compatible releases but can change the delivered bytes.
 
 ## Install from npm
 
 ```bash
-npm install --save-exact ontologyviewer@0.1.2
+npm install --save-exact ontologyviewer@0.2.0
 ```
 
 ```ts
@@ -51,6 +51,7 @@ await manager.ready;
 
 - Schema cards with datatype properties, icons, color hints, cardinality, inferred-relation styling, statistics, legend, and read-only Inspector.
 - Raw Triples view, search, neighborhood focus, pan, zoom, fit, fCoSE/Dagre layouts, node dragging, and PNG export.
+- Compact Triples view (on by default): labels, comments, and standard vocabulary terms are folded into the nodes that reference them, which removed two thirds of the boxes and 70% of the edges on a 1182-triple schema ontology. A toolbar toggle expands them again; set `compactTriples: false` or `data-compact-triples="false"` to start expanded.
 - Multiple isolated viewers in one document.
 - English and Japanese UI; automatic light/dark theme tracking.
 - Optional, validated `localStorage` layout persistence.
@@ -69,6 +70,7 @@ await manager.ready;
   data-locale="ja"
   data-layout="dagre"
   data-default-view="schema"
+  data-compact-triples="true"
   data-base-iri="https://example.org/base/"
   data-storage-key="harbor-market"
 >...</script>
@@ -83,6 +85,7 @@ const source = document.querySelector<HTMLElement>("#ontology")!;
 const instance = ontologyviewer.render(source, {
   baseIri: "https://example.org/base/",
   defaultView: "schema",
+  compactTriples: true,
   layout: "fcose",
   storageKey: "example-layout", // omit to disable persistence
   onError(error) {
@@ -109,14 +112,14 @@ Automatic style injection is convenient but requires an inline `<style>`. Disabl
 
 ```html
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.css"
+      href="https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.css"
       data-ontologyviewer-styles>
 <script type="module" src="/assets/start-ontologyviewer.mjs"></script>
 ```
 
 ```js
 // /assets/start-ontologyviewer.mjs
-import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs";
+import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.esm.min.mjs";
 ontologyviewer.initialize({ startOnLoad: true, injectStyles: false });
 ```
 
@@ -145,7 +148,7 @@ The ESM bundle targets ES2020 and is tested in CI with current Playwright Chromi
 
 ## Development and publishing
 
-`webplugin/` is self-contained. Copy its contents to a repository root without the parent VS Code extension and run:
+This package is self-contained. After cloning, run:
 
 ```bash
 npm ci

@@ -19,21 +19,21 @@ Webページ内のTurtleを、読み取り専用の **Schema** 図と **Triples*
 </script>
 
 <script type="module">
-  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs";
+  import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.esm.min.mjs";
   ontologyviewer.initialize({ startOnLoad: true });
 </script>
 ```
 
 実行されない `text/turtle` の `<script>` はDOM内に保持され、Viewer稼働中は非表示です。この形式ならTurtleの `<...>` IRIをHTML entityへ変換せず、そのまま記述できます。ただし、Turtle内にリテラルな `</script>` があるとHTMLがsource要素の終了タグとして扱うため避けてください。従来の `<pre class="ontologyviewer">` も利用できますが、HTMLソース内の `<` は `&lt;` と書く必要があります。`destroy()` はどちらのsource要素も元の状態へ戻します。
 
-`examples/` のHTMLをFinderなどから直接開かないでください。ブラウザのES Moduleは `file:` URLでCORSブロックされます。`webplugin/` で `npm run examples` を実行し、`http://127.0.0.1:4173/examples/index.html` を開いてください。直開きや `dist/` 未生成時には、example画面に起動手順が表示されます。
+`examples/` のHTMLをFinderなどから直接開かないでください。ブラウザのES Moduleは `file:` URLでCORSブロックされます。`npm run examples` を実行し、`http://127.0.0.1:4173/examples/index.html` を開いてください。直開きや `dist/` 未生成時には、example画面に起動手順が表示されます。
 
-再現性を重視するページでは完全なバージョン（`@0.1.2`）を固定してください。`@10` のようなmajor指定は互換更新に追従できますが、配信内容は将来変化します。
+再現性を重視するページでは完全なバージョン（`@0.2.0`）を固定してください。`@10` のようなmajor指定は互換更新に追従できますが、配信内容は将来変化します。
 
 ## npmから利用
 
 ```bash
-npm install --save-exact ontologyviewer@0.1.2
+npm install --save-exact ontologyviewer@0.2.0
 ```
 
 ```ts
@@ -51,6 +51,7 @@ await manager.ready;
 
 - datatype property、アイコン、色指定、cardinality、推論関係、統計、凡例、読み取り専用Inspectorを備えたSchemaカード。
 - Triples表示、検索、近傍focus、pan、zoom、fit、fCoSE/Dagre、node移動、PNG出力。
+- Triples表示の簡約（既定で有効）。ラベル・コメント・標準語彙の用語を、それを参照しているノードに畳み込みます。1182トリプルのスキーマオントロジーで箱が3分の1、エッジが70%減りました。ツールバーのトグルで展開でき、`compactTriples: false` または `data-compact-triples="false"` で最初から展開状態にできます。
 - 1ページ内の複数Viewerを完全に分離。
 - 英語・日本語UIとlight/darkテーマの自動追従。
 - `storageKey` を指定した場合だけ、有効値を検査してレイアウトを `localStorage` に保存。
@@ -69,6 +70,7 @@ await manager.ready;
   data-locale="ja"
   data-layout="dagre"
   data-default-view="schema"
+  data-compact-triples="true"
   data-base-iri="https://example.org/base/"
   data-storage-key="harbor-market"
 >...</script>
@@ -83,6 +85,7 @@ const source = document.querySelector<HTMLElement>("#ontology")!;
 const instance = ontologyviewer.render(source, {
   baseIri: "https://example.org/base/",
   defaultView: "schema",
+  compactTriples: true,
   layout: "fcose",
   storageKey: "example-layout", // 省略すると保存しない
   onError(error) {
@@ -107,13 +110,13 @@ inline `<style>` が許可されない場合は自動注入を止め、CSSを明
 
 ```html
 <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.css"
+      href="https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.css"
       data-ontologyviewer-styles>
 <script type="module" src="/assets/start-ontologyviewer.mjs"></script>
 ```
 
 ```js
-import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs";
+import ontologyviewer from "https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.esm.min.mjs";
 ontologyviewer.initialize({ startOnLoad: true, injectStyles: false });
 ```
 
@@ -142,7 +145,7 @@ ESM bundleはES2020をtargetとし、CIでPlaywright Chromium、Firefox、WebKit
 
 ## 開発・公開
 
-`webplugin/` は自己完結しています。内容を新しいrepositoryのrootへコピーしても、次の手順で検証できます。
+このパッケージは自己完結しています。cloneしたあと、次の手順で検証できます。
 
 ```bash
 npm ci

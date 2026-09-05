@@ -5,3 +5,6 @@ playwright-report/
 test-results/
 *.tgz
 .DS_Store
+
+# Local scratch pages for manual evaluation (not part of the package)
+local/

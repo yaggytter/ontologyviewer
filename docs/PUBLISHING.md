@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - The standalone repository is public so npm can attach provenance.
-- `package.json.repository.url` exactly matches that public GitHub repository. Remove the `directory` field if `webplugin/` has become the repository root.
+- `package.json.repository.url` exactly matches that public GitHub repository, with no `directory` field: this package is the repository root.
 - Maintainers use npm 2FA. Release CI uses a GitHub-hosted runner, Node 24, and npm 11.5.1 or newer.
 - Recheck `npm view ontologyviewer`; the name was unregistered when this project was planned, but availability can change.
 
@@ -29,6 +29,12 @@ On npmjs.com, open the package's **Trusted Publisher** settings and authorize:
 - Provider: GitHub Actions
 - GitHub owner/repository: the final public standalone repository
 - Workflow filename: `webplugin-publish.yml`
+
+  The name is historical, from when this package lived in a `webplugin/`
+  subdirectory. Do not rename it as a tidy-up: npm Trusted Publishing matches
+  the workflow **filename** when authorizing a publish, so renaming the file
+  breaks releases until the trusted publisher configuration on npm is updated
+  to match.
 - Environment: `npm-publish`
 - Allowed action: `npm publish` (or stage-only if using npm staged publishing)
 
@@ -36,16 +42,24 @@ Create the protected `npm-publish` GitHub Environment, require reviewers, and pr
 
 ## Release
 
-1. Update CHANGELOG and version without creating an automatic tag:
+1. Update CHANGELOG and version without creating an automatic tag. Pick the
+   bump that matches the change: `patch` for fixes, `minor` for new features or
+   for a behavioral default that embedders may need to opt out of, `major` once
+   the package is past 1.0 and the change breaks a documented contract.
    ```bash
-   npm version patch --no-git-tag-version
+   npm version minor --no-git-tag-version
    ```
+   Give the new version its own `## [x.y.z] — YYYY-MM-DD` heading in
+   CHANGELOG.md and a matching `[x.y.z]: .../releases/tag/vx.y.z` link, then
+   bump every pinned version in README.md, README.ja.md, and
+   docs/GETTING_STARTED.md so the install and CDN instructions do not point at
+   the previous release.
 2. Run `npm ci && npm run verify:full && npm pack --dry-run`.
 3. Commit and merge the release change.
 4. Create and push an exact version tag:
    ```bash
-   git tag v0.1.2
-   git push origin v0.1.2
+   git tag v0.2.0
+   git push origin v0.2.0
    ```
 5. The workflow verifies `v${package.version}`, reruns every gate, requests an OIDC token only in the protected publish job, and runs `npm publish --access public`. Trusted Publishing adds provenance automatically.
 
@@ -54,15 +68,15 @@ The workflow intentionally contains no `NODE_AUTH_TOKEN` or npm secret.
 ## Verify npm and jsDelivr
 
 ```bash
-npm view ontologyviewer@0.1.2 version dist.integrity repository
-npm pack ontologyviewer@0.1.2 --dry-run
+npm view ontologyviewer@0.2.0 version dist.integrity repository
+npm pack ontologyviewer@0.2.0 --dry-run
 ```
 
 Then test:
 
 ```text
-https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.esm.min.mjs
-https://cdn.jsdelivr.net/npm/ontologyviewer@0.1.2/dist/ontologyviewer.css
+https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.esm.min.mjs
+https://cdn.jsdelivr.net/npm/ontologyviewer@0.2.0/dist/ontologyviewer.css
 ```
 
 Use an exact version in release validation. CDN propagation can take a short time.

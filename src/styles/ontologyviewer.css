@@ -71,6 +71,51 @@
   color: #fff;
   background: #0878bd;
 }
+/* Compaction toggle. A checkbox rather than a pressed button, because
+   schema/triples is an exclusive selection while this is an independent on/off
+   — and a checkbox shows its state without depending on colour. Styled as a
+   toolbar chip so it sits at the same height as the buttons beside it. */
+.ontologyviewer-root .ov-compact-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 10px 4px 8px;
+  border: 1px solid var(--ov-border);
+  border-radius: 6px;
+  color: var(--ov-fg);
+  background: var(--ov-bg);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+.ontologyviewer-root .ov-compact-toggle:hover { background: var(--ov-hover); }
+.ontologyviewer-root .ov-compact-toggle[hidden] { display: none; }
+.ontologyviewer-root .ov-compact-checkbox {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  accent-color: #0878bd;
+  cursor: pointer;
+}
+/* Keyboard focus lands on the input, so raise the ring to the whole chip.
+   Scoped to :focus-visible so a mouse click does not leave a blue ring behind
+   that reads as "still enabled" on an unchecked control. */
+.ontologyviewer-root .ov-compact-toggle:has(.ov-compact-checkbox:focus-visible) {
+  outline: 2px solid #0878bd;
+  outline-offset: 1px;
+}
+/* Checked state also shifts the chip itself, so the setting reads at a glance
+   from across the toolbar rather than only from the 14px box. */
+.ontologyviewer-root .ov-compact-toggle:has(.ov-compact-checkbox:checked) {
+  border-color: #0878bd;
+  color: #0878bd;
+  font-weight: 600;
+}
+.ontologyviewer-root.ov-dark .ov-compact-toggle:has(.ov-compact-checkbox:checked) {
+  border-color: #4aa3dd;
+  color: #7dc4f0;
+}
 .ontologyviewer-root .ov-search {
   flex: 1 1 250px;
   min-width: 130px;

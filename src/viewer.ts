@@ -4,6 +4,7 @@ import fcose from "cytoscape-fcose";
 import dagre from "cytoscape-dagre";
 import type { LayoutName, OntologyViewerError, OntologyViewerInstance, OntologyViewerOptions, ViewerStatus, ViewMode } from "./types";
 import { parseTurtle } from "./rdf/parser";
+import { compactTriples } from "./rdf/compactTriples";
 import { buildGraphModel, type OntologyGraph } from "./rdf/graphModel";
 import { buildSchemaModel, type SchemaEntity, type SchemaModel, type SchemaRelation } from "./rdf/schemaModel";
 import { COLOR_PALETTE_SIZE } from "./rdf/appearance";
@@ -25,6 +26,8 @@ interface ViewerDom {
   toolbar: HTMLElement;
   schemaButton: HTMLButtonElement;
   triplesButton: HTMLButtonElement;
+  compactToggle: HTMLLabelElement;
+  compactCheckbox: HTMLInputElement;
   search: HTMLInputElement;
   searchResults: HTMLElement;
   layout: HTMLSelectElement;
@@ -61,6 +64,7 @@ export function createViewer(
   let graph: OntologyGraph = { nodes: [], edges: [] };
   let currentView: ViewMode = options.defaultView ?? "schema";
   let currentLayout: LayoutName = options.layout ?? "fcose";
+  let compactTriplesEnabled = options.compactTriples ?? true;
   let dark = isDarkTheme(options.theme ?? "auto");
   let cy: cytoscape.Core | undefined;
   let destroyed = false;
@@ -173,7 +177,7 @@ export function createViewer(
     destroyCy();
     focusedId = undefined;
     const view = effectiveView();
-    const elements = view === "schema" ? schemaElements(schema) : graphElements(graph);
+    const elements = view === "schema" ? schemaElements(schema) : graphElements(graph, compactTriplesEnabled);
     cy = cytoscape({
       container: dom.graph,
       elements,
@@ -329,6 +333,13 @@ export function createViewer(
     dom.triplesButton.classList.toggle("active", currentView === "triples");
     dom.schemaButton.setAttribute("aria-pressed", String(currentView === "schema"));
     dom.triplesButton.setAttribute("aria-pressed", String(currentView === "triples"));
+    // The schema view already folds datatype properties into class cards, so
+    // the control would do nothing there.
+    dom.compactToggle.hidden = effectiveView() !== "triples";
+    dom.compactCheckbox.checked = compactTriplesEnabled;
+    dom.compactToggle.title = compactTriplesEnabled
+      ? messages.compactTriplesActiveHint
+      : messages.compactTriplesHint;
   }
 
   function updateStats(): void {
@@ -461,6 +472,12 @@ export function createViewer(
     clearInspector();
     renderGraph();
   }, { signal });
+  dom.compactCheckbox.addEventListener("change", () => {
+    compactTriplesEnabled = dom.compactCheckbox.checked;
+    updateViewButtons();
+    clearInspector();
+    renderGraph();
+  }, { signal });
   dom.search.addEventListener("input", performSearch, { signal });
   dom.search.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") return;
@@ -518,6 +535,19 @@ function createDom(doc: Document, root: HTMLElement, messages: Messages, options
   const triplesButton = button(doc, messages.triplesView, "ov-btn-triples");
   viewToggle.append(schemaButton, triplesButton);
 
+  // A checkbox rather than a pressed button: schema/triples is a mutually
+  // exclusive selection, while compaction is an independent on/off. The
+  // distinct control type communicates that, and a checkbox states its value
+  // without relying on colour. Only meaningful in the triples view, so the
+  // whole chip is hidden elsewhere rather than shown as a dead control.
+  const compactToggle = element(doc, "label", "ov-compact-toggle");
+  const compactCheckbox = doc.createElement("input");
+  compactCheckbox.type = "checkbox";
+  compactCheckbox.className = "ov-compact-checkbox";
+  const compactText = element(doc, "span", "ov-compact-text");
+  compactText.textContent = messages.compactTriples;
+  compactToggle.append(compactCheckbox, compactText);
+
   const search = doc.createElement("input");
   search.type = "search";
   search.className = "ov-search";
@@ -545,7 +575,7 @@ function createDom(doc: Document, root: HTMLElement, messages: Messages, options
     button(doc, messages.layout, "ov-btn-layout", "↻"),
     button(doc, messages.exportPng, "ov-btn-export", "⇩"),
   );
-  toolbar.append(viewToggle, search, layout, controls);
+  toolbar.append(viewToggle, compactToggle, search, layout, controls);
 
   const searchResults = element(doc, "div", "ov-search-dropdown");
   searchResults.setAttribute("role", "listbox");
@@ -581,7 +611,7 @@ function createDom(doc: Document, root: HTMLElement, messages: Messages, options
   footer.append(stats, legend);
   root.append(toolbar, searchResults, body, footer);
   const zoomLabelElement = controls.querySelector<HTMLElement>(".ov-btn-reset-zoom") ?? controls;
-  return { toolbar, schemaButton, triplesButton, search, searchResults, layout, zoomLabel: zoomLabelElement, stage, graph, message, inspector, stats, legend };
+  return { toolbar, schemaButton, triplesButton, compactToggle, compactCheckbox, search, searchResults, layout, zoomLabel: zoomLabelElement, stage, graph, message, inspector, stats, legend };
 }
 
 function schemaElements(schema: SchemaModel): cytoscape.ElementDefinition[] {
@@ -621,11 +651,30 @@ function schemaElements(schema: SchemaModel): cytoscape.ElementDefinition[] {
   return [...nodes, ...edges];
 }
 
-function graphElements(graph: OntologyGraph): cytoscape.ElementDefinition[] {
+function graphElements(graph: OntologyGraph, compact: boolean): cytoscape.ElementDefinition[] {
+  // Compaction is a presentation choice: `graph` stays a faithful
+  // representation of the parsed triples, so the toggle just re-renders.
+  const folded = compact ? compactTriples(graph) : undefined;
+  const nodes = folded?.nodes ?? graph.nodes;
+  const edges = folded?.edges ?? graph.edges;
   return [
-    ...graph.nodes.map((node) => ({ data: { id: node.id, label: node.label, kind: node.kind } })),
-    ...graph.edges.map((edge) => ({ data: { id: edge.id, source: edge.source, target: edge.target, edgeLabel: edge.predicateLabel } })),
+    ...nodes.map((node) => ({
+      data: {
+        id: node.id,
+        label: node.label,
+        // `label` stays the bare name so search keeps matching it; the folded
+        // form is a separate field used only by the stylesheet.
+        tripleLabel: tripleLabelFor(node.label, folded?.foldedFacts.get(node.id)),
+        kind: node.kind,
+      },
+    })),
+    ...edges.map((edge) => ({ data: { id: edge.id, source: edge.source, target: edge.target, edgeLabel: edge.predicateLabel } })),
   ];
+}
+
+/** The node's name plus any statements folded onto it, one per line. */
+function tripleLabelFor(label: string, facts: string[] | undefined): string {
+  return facts && facts.length > 0 ? `${label}\n${facts.join("\n")}` : label;
 }
 
 function schemaStyles(dark: boolean): cytoscape.StylesheetStyle[] {
@@ -653,14 +702,18 @@ function schemaStyles(dark: boolean): cytoscape.StylesheetStyle[] {
 function triplesStyles(dark: boolean): cytoscape.StylesheetStyle[] {
   return [
     { selector: "node", style: {
-      label: "data(label)", "text-valign": "center", "text-halign": "center", "text-wrap": "ellipsis", "text-max-width": "130px",
-      width: 154, height: 54, shape: "round-rectangle", "font-size": 11, "border-width": 1.5,
+      // `tripleLabel` carries the folded statements as extra lines, so the box
+      // must wrap and size to its content — with the previous `ellipsis` wrap
+      // and fixed 154x54 box they were silently clipped away.
+      label: "data(tripleLabel)", "text-valign": "center", "text-halign": "center", "text-wrap": "wrap", "text-max-width": "150px",
+      width: "label", height: "label", padding: "10px", "min-width": "120px",
+      shape: "round-rectangle", "font-size": 11, "border-width": 1.5,
       "background-color": dark ? "#2d2d2d" : "#f1f5f9", "border-color": dark ? "#666" : "#94a3b8", color: dark ? "#eee" : "#1e293b",
-    } as cytoscape.Css.Node },
+    } as unknown as cytoscape.Css.Node },
     { selector: "node[kind = 'class']", style: { "background-color": dark ? "#18324b" : "#dbeafe", "border-color": "#3b82f6" } as cytoscape.Css.Node },
     { selector: "node[kind = 'property']", style: { "background-color": dark ? "#3b1f3b" : "#fce7f3", "border-color": "#a855f7" } as cytoscape.Css.Node },
     { selector: "node[kind = 'literal']", style: {
-      width: 138, height: 44, "font-size": 10, "border-style": "dashed",
+      "font-size": 10, "border-style": "dashed",
       "background-color": dark ? "#38331f" : "#fef9c3", "border-color": dark ? "#d6b94c" : "#ca8a04",
     } as cytoscape.Css.Node },
     { selector: "node:selected", style: { "border-color": "#007fd4", "border-width": 3 } as cytoscape.Css.Node },

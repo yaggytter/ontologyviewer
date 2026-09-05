@@ -5,7 +5,7 @@ if (location.protocol === "file:") {
     status.hidden = false;
     status.classList.add("example-error");
     status.setAttribute("role", "alert");
-    status.textContent = "This example must be served over HTTP. Run \"npm run examples\" in webplugin, then open the displayed http://127.0.0.1 URL.";
+    status.textContent = "This example must be served over HTTP. Run \"npm run examples\", then open the displayed http://127.0.0.1 URL.";
   }
 } else {
   try {
@@ -20,7 +20,7 @@ if (location.protocol === "file:") {
       status.hidden = false;
       status.classList.add("example-error");
       status.setAttribute("role", "alert");
-      status.textContent = `Unable to start the viewer: ${error instanceof Error ? error.message : String(error)} Run \"npm run examples\" in webplugin and open the displayed http://127.0.0.1 URL. Also ensure \"npm run build\" succeeds.`;
+      status.textContent = `Unable to start the viewer: ${error instanceof Error ? error.message : String(error)} Run \"npm run examples\" and open the displayed http://127.0.0.1 URL. Also ensure \"npm run build\" succeeds.`;
     }
     console.error("Ontology Viewer example failed to start", error);
   }
