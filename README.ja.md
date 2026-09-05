@@ -26,7 +26,7 @@ Webページ内のTurtleを、読み取り専用の **Schema** 図と **Triples*
 
 実行されない `text/turtle` の `<script>` はDOM内に保持され、Viewer稼働中は非表示です。この形式ならTurtleの `<...>` IRIをHTML entityへ変換せず、そのまま記述できます。ただし、Turtle内にリテラルな `</script>` があるとHTMLがsource要素の終了タグとして扱うため避けてください。従来の `<pre class="ontologyviewer">` も利用できますが、HTMLソース内の `<` は `&lt;` と書く必要があります。`destroy()` はどちらのsource要素も元の状態へ戻します。
 
-`examples/` のHTMLをFinderなどから直接開かないでください。ブラウザのES Moduleは `file:` URLでCORSブロックされます。`webplugin/` で `npm run examples` を実行し、`http://127.0.0.1:4173/examples/index.html` を開いてください。直開きや `dist/` 未生成時には、example画面に起動手順が表示されます。
+`examples/` のHTMLをFinderなどから直接開かないでください。ブラウザのES Moduleは `file:` URLでCORSブロックされます。`npm run examples` を実行し、`http://127.0.0.1:4173/examples/index.html` を開いてください。直開きや `dist/` 未生成時には、example画面に起動手順が表示されます。
 
 再現性を重視するページでは完全なバージョン（`@0.2.0`）を固定してください。`@10` のようなmajor指定は互換更新に追従できますが、配信内容は将来変化します。
 
@@ -145,7 +145,7 @@ ESM bundleはES2020をtargetとし、CIでPlaywright Chromium、Firefox、WebKit
 
 ## 開発・公開
 
-`webplugin/` は自己完結しています。内容を新しいrepositoryのrootへコピーしても、次の手順で検証できます。
+このパッケージは自己完結しています。cloneしたあと、次の手順で検証できます。
 
 ```bash
 npm ci

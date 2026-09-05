@@ -26,7 +26,7 @@ A standalone, read-only Turtle ontology viewer for web pages. It renders class-f
 
 The inert `text/turtle` script is retained in the DOM and hidden while its viewer is active. It accepts ordinary Turtle `<...>` IRIs without HTML entity escaping. Avoid a literal `</script>` sequence in that Turtle because HTML treats it as the closing tag. A `<pre class="ontologyviewer">` remains supported, but literal HTML source must write `<` as `&lt;`; `destroy()` restores either source element.
 
-Do not double-click the files under `examples/`: browser ES Modules are commonly blocked on `file:` URLs. From `webplugin/`, run `npm run examples` and open `http://127.0.0.1:4173/examples/index.html`. The example page now keeps an actionable message visible when it is opened incorrectly or when `dist/` has not been built.
+Do not double-click the files under `examples/`: browser ES Modules are commonly blocked on `file:` URLs. Run `npm run examples` and open `http://127.0.0.1:4173/examples/index.html`. The example page now keeps an actionable message visible when it is opened incorrectly or when `dist/` has not been built.
 
 For reproducible pages, pin a complete version (`@0.2.0`). A major selector such as `@10` follows compatible releases but can change the delivered bytes.
 
@@ -148,7 +148,7 @@ The ESM bundle targets ES2020 and is tested in CI with current Playwright Chromi
 
 ## Development and publishing
 
-`webplugin/` is self-contained. Copy its contents to a repository root without the parent VS Code extension and run:
+This package is self-contained. After cloning, run:
 
 ```bash
 npm ci

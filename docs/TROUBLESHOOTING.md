@@ -2,7 +2,7 @@
 
 ## An example shows no viewer
 
-Do not open `examples/*.html` directly with a `file:` URL. Browsers block the relative ESM import from an opaque `null` origin. Run `npm run examples` in `webplugin/`, then open `http://127.0.0.1:4173/examples/index.html`. If `dist/` is missing or cannot load, the page displays this command instead of failing silently.
+Do not open `examples/*.html` directly with a `file:` URL. Browsers block the relative ESM import from an opaque `null` origin. Run `npm run examples`, then open `http://127.0.0.1:4173/examples/index.html`. If `dist/` is missing or cannot load, the page displays this command instead of failing silently.
 
 ## The source remains visible
 

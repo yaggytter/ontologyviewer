@@ -3,7 +3,7 @@
 ## Prerequisites
 
 - The standalone repository is public so npm can attach provenance.
-- `package.json.repository.url` exactly matches that public GitHub repository. Remove the `directory` field if `webplugin/` has become the repository root.
+- `package.json.repository.url` exactly matches that public GitHub repository, with no `directory` field: this package is the repository root.
 - Maintainers use npm 2FA. Release CI uses a GitHub-hosted runner, Node 24, and npm 11.5.1 or newer.
 - Recheck `npm view ontologyviewer`; the name was unregistered when this project was planned, but availability can change.
 
@@ -29,6 +29,12 @@ On npmjs.com, open the package's **Trusted Publisher** settings and authorize:
 - Provider: GitHub Actions
 - GitHub owner/repository: the final public standalone repository
 - Workflow filename: `webplugin-publish.yml`
+
+  The name is historical, from when this package lived in a `webplugin/`
+  subdirectory. Do not rename it as a tidy-up: npm Trusted Publishing matches
+  the workflow **filename** when authorizing a publish, so renaming the file
+  breaks releases until the trusted publisher configuration on npm is updated
+  to match.
 - Environment: `npm-publish`
 - Allowed action: `npm publish` (or stage-only if using npm staged publishing)
 
